@@ -2,17 +2,29 @@ class GildedRose
 
   def initialize(items)
     @items = items
+    normal_items = @items.select { |item| !item.name.include?("Aged Brie") and !item.name.include?("Backstage passes") and !item.name.include?("Sulfras") }
+    @normal_items = normal_items
+    conjured_items = @items.select { |item| item.name.include?("Conjured") }
+    @conjured_items = conjured_items
+    aged_bries = @items.select { |item| item.name.include?("Aged Brie") }
+    @Aged_bries = aged_bries
+    backstage_passes = @items.select { |item| item.name.include?("Backstage") }
+    @backstage_passes = backstage_passes
   end
 
-  def update_normal_item(item)
-    item.quality -= 1 if item.quality > 0
+  def update_normal_items()
+    @normal_items.map { |item| item.quality -= 1 if item.quality > 0 }
+    @normal_items.map { |item| item.sell_in -= 1 }
   end
 
-  def update_conjured_item(item)
-    item.quality -= 1 if item.quality > 0
+  def update_conjured_items()
+    @conjured_items.each do |item|
+      item.quality > 1? item.quality -= 2 : item.quality = 0
+      item.sell_in -= 1
+    end
   end
 
-  def update_backstage_passes(item)
+  def update_backstage_passes()
     if item.sell_in < 11
       if item.quality < 50
         item.quality = item.quality + 1
