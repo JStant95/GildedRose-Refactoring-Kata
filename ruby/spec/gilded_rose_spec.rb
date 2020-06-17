@@ -127,6 +127,34 @@ describe GildedRose do
       items = [Item.new("Vest", 10, 10)]
       GildedRose.new(items).update_normal_items()
       expect(items[0].quality).to eq 9
+      expect(items[0].sell_in).to eq 9
+    end
+
+    it "A normal item changes quality and sellIn by 2 after 2 days" do
+      items = [Item.new("Vest", 10, 10)]
+      shop = GildedRose.new(items)
+      shop.update_normal_items()
+      shop.update_normal_items()
+      expect(items[0].sell_in).to eq 8
+      expect(items[0].quality).to eq 8
+    end
+
+    it "the quality of a normal item does not go below zero" do
+      items = [Item.new("Vest", 10, 1)]
+      shop = GildedRose.new(items)
+      shop.update_normal_items()
+      shop.update_normal_items()
+      expect(items[0].quality).to eq 0
+    end
+  end
+
+  describe "#update_conjured_items" do
+    it "A conjured item's value decreases by 2 after each day" do
+      items = [Item.new('Conjured bread', 10, 40)]
+      shop = GildedRose.new(items)
+      shop.update_conjured_items()
+      expect(items[0].quality).to eq 38
+      expect(items[0].sell_in).to eq 9
     end
   end
 end
