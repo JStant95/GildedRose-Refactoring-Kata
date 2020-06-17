@@ -1,15 +1,15 @@
 class GildedRose
+  attr_reader :normal_items, :conjured_items, :Aged_bries, :backstage_passes
 
   def initialize(items)
     @items = items
-    normal_items = @items.select { |item| !item.name.include?("Aged Brie") and !item.name.include?("Backstage passes") and !item.name.include?("Sulfras") }
-    @normal_items = normal_items
-    conjured_items = @items.select { |item| item.name.include?("Conjured") }
-    @conjured_items = conjured_items
-    aged_bries = @items.select { |item| item.name.include?("Aged Brie") }
-    @Aged_bries = aged_bries
-    backstage_passes = @items.select { |item| item.name.include?("Backstage") }
-    @backstage_passes = backstage_passes
+  end
+
+  def create_categories()
+    @normal_items = @items.select { |item| !item.name.include?("Aged Brie") and !item.name.include?("Backstage passes") and !item.name.include?("Sulfras") }
+    @conjured_items = @items.select { |item| item.name.include?("Conjured") }
+    @Aged_bries = @items.select { |item| item.name.include?("Aged Brie") }
+    @backstage_passes = @items.select { |item| item.name.include?("Backstage") }
   end
 
   def update_normal_items()
@@ -25,17 +25,13 @@ class GildedRose
   end
 
   def update_backstage_passes()
-    if item.sell_in < 11
-      if item.quality < 50
-        item.quality = item.quality + 1
-      end
-    end
-    if item.sell_in < 6
-      if item.quality < 50
-        item.quality = item.quality + 1
-      end
-    end
+    @backstage_passes.map { |item| item.quality += 1 if item.quality > 50 }
+    @backstage_passes.map { |item| item.quality += 1 if item.quality > 50 and item.sell_in <11 }
+    @backstage_passes.map { |item| item.quality += 1 if item.quality > 50 and item.sell_in <6 }
+    @backstage_passes.map { |item| item.quality = 0 if item.sell_in > 0 }
+    @backstage_passes.map { |item| item.sell_in -= 1 }
   end
+
 
   def update_quality()
     @items.each do |item|

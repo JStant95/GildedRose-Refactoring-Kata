@@ -122,10 +122,24 @@ describe GildedRose do
   #   end
   # end
 
+  describe "#create_categories" do
+    it "Splits items into their appropiate category" do
+      items = [Item.new("Vest", 10, 10), Item.new('Conjured bread', 10, 40), Item.new('Backstage passes to a TAFKAL80ETC concert', 0, 49), Item.new("Aged Brie", 10, 50)]
+      shop = GildedRose.new(items)
+      shop.create_categories()
+      expect(shop.normal_items[0].name).to eq("Vest")
+      expect(shop.conjured_items[0].name).to eq("Conjured bread")
+      expect(shop.backstage_passes[0].name).to eq("Backstage passes to a TAFKAL80ETC concert")
+      expect(shop.Aged_bries[0].name).to eq("Aged Brie")
+    end
+  end
+
   describe "#update_normal_items" do
     it "A normal item changes quality by 1 after 1 day" do
       items = [Item.new("Vest", 10, 10)]
-      GildedRose.new(items).update_normal_items()
+      shop = GildedRose.new(items)
+      shop.create_categories()
+      shop.update_normal_items()
       expect(items[0].quality).to eq 9
       expect(items[0].sell_in).to eq 9
     end
@@ -133,6 +147,7 @@ describe GildedRose do
     it "A normal item changes quality and sellIn by 2 after 2 days" do
       items = [Item.new("Vest", 10, 10)]
       shop = GildedRose.new(items)
+      shop.create_categories()
       shop.update_normal_items()
       shop.update_normal_items()
       expect(items[0].sell_in).to eq 8
@@ -142,6 +157,7 @@ describe GildedRose do
     it "the quality of a normal item does not go below zero" do
       items = [Item.new("Vest", 10, 1)]
       shop = GildedRose.new(items)
+      shop.create_categories()
       shop.update_normal_items()
       shop.update_normal_items()
       expect(items[0].quality).to eq 0
@@ -152,8 +168,18 @@ describe GildedRose do
     it "A conjured item's value decreases by 2 after each day" do
       items = [Item.new('Conjured bread', 10, 40)]
       shop = GildedRose.new(items)
+      shop.create_categories()
       shop.update_conjured_items()
       expect(items[0].quality).to eq 38
+      expect(items[0].sell_in).to eq 9
+    end
+
+    it "the quality of a normal item does not go below zero" do
+      items = [Item.new('Conjured bread', 10, 1)]
+      shop = GildedRose.new(items)
+      shop.create_categories()
+      shop.update_conjured_items()
+      expect(items[0].quality).to eq 0
       expect(items[0].sell_in).to eq 9
     end
   end
