@@ -4,28 +4,41 @@ class GildedRose
     @items = items
   end
 
+  def update_normal_item(item)
+    item.quality -= 1 if item.quality > 0
+  end
+
+  def update_conjured_item(item)
+    item.quality -= 1 if item.quality > 0
+  end
+
+  def update_backstage_passes(item)
+    if item.sell_in < 11
+      if item.quality < 50
+        item.quality = item.quality + 1
+      end
+    end
+    if item.sell_in < 6
+      if item.quality < 50
+        item.quality = item.quality + 1
+      end
+    end
+  end
+
   def update_quality()
     @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
+      if !item.name.include?("Aged Brie") and !item.name.include?("Backstage passes")
+          if !item.name.include?("Sulfuras")
+            update_normal_item(item)
           end
-        end
+          if item.name.include?("Conjured")
+            update_conjured_item(item)
+          end
       else
         if item.quality < 50
           item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
+          if item.name.include?("Backstage passes")
+            update_backstage_passes(item)
           end
         end
       end
