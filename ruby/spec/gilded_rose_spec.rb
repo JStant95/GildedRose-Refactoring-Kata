@@ -155,4 +155,72 @@ describe GildedRose do
         expect(items[0].sell_in).to eq 9
       end
     end
+
+
+    describe "feature tests" do
+      it "1 day with items of all categories" do
+        items = [Item.new("Aged Brie", 10, 40), Item.new('Backstage passes to a TAFKAL80ETC concert', 12, 30), Item.new('Conjured bread', 10, 10), Item.new("Vest", 10, 10), Item.new("Sulfuras, Hand of Ragnaros", 0, 80)]
+        shop = GildedRose.new(items)
+        shop.update_quality()
+        expect(items[0].quality).to eq 41
+        expect(items[0].sell_in).to eq 9
+        expect(items[1].quality).to eq 31
+        expect(items[1].sell_in).to eq 11
+        expect(items[2].quality).to eq 8
+        expect(items[2].sell_in).to eq 9
+        expect(items[3].quality).to eq 9
+        expect(items[3].sell_in).to eq 9
+        expect(items[4].quality).to eq 80
+        expect(items[4].sell_in).to eq 0
+      end
+
+      it "2 days with items of all categories" do
+        items = [Item.new("Aged Brie", 10, 40), Item.new('Backstage passes to a TAFKAL80ETC concert', 12, 30), Item.new('Conjured bread', 10, 10), Item.new("Vest", 10, 10), Item.new("Sulfuras, Hand of Ragnaros", 0, 80)]
+        shop = GildedRose.new(items)
+        shop.update_quality()
+        shop.update_quality()
+        expect(items[0].quality).to eq 42
+        expect(items[0].sell_in).to eq 8
+        expect(items[1].quality).to eq 33
+        expect(items[1].sell_in).to eq 10
+        expect(items[2].quality).to eq 6
+        expect(items[2].sell_in).to eq 8
+        expect(items[3].quality).to eq 8
+        expect(items[3].sell_in).to eq 8
+        expect(items[4].quality).to eq 80
+        expect(items[4].sell_in).to eq 0
+      end
+
+      it "5 days with items of all categories" do
+        items = [Item.new("Aged Brie", 10, 40), Item.new('Backstage passes to a TAFKAL80ETC concert', 12, 30), Item.new('Conjured bread', 10, 10), Item.new("Vest", 10, 10), Item.new("Sulfuras, Hand of Ragnaros", 0, 80)]
+        shop = GildedRose.new(items)
+        5.times { shop.update_quality() }
+        expect(items[0].quality).to eq 45
+        expect(items[0].sell_in).to eq 5
+        expect(items[1].quality).to eq 39
+        expect(items[1].sell_in).to eq 7
+        expect(items[2].quality).to eq 0
+        expect(items[2].sell_in).to eq 5
+        expect(items[3].quality).to eq 5
+        expect(items[3].sell_in).to eq 5
+        expect(items[4].quality).to eq 80
+        expect(items[4].sell_in).to eq 0
+      end
+
+      it "10 days with items of all categories" do
+        items = [Item.new("Aged Brie", 10, 40), Item.new('Backstage passes to a TAFKAL80ETC concert', 12, 30), Item.new('Conjured bread', 10, 10), Item.new("Vest", 10, 10), Item.new("Sulfuras, Hand of Ragnaros", 0, 80)]
+        shop = GildedRose.new(items)
+        10.times { shop.update_quality() }
+        expect(items[0].quality).to eq 50
+        expect(items[0].sell_in).to eq 0
+        expect(items[1].quality).to eq 50
+        expect(items[1].sell_in).to eq 2
+        expect(items[2].quality).to eq 0
+        expect(items[2].sell_in).to eq 0
+        expect(items[3].quality).to eq 0
+        expect(items[3].sell_in).to eq 0
+        expect(items[4].quality).to eq 80
+        expect(items[4].sell_in).to eq 0
+      end
+    end
   end

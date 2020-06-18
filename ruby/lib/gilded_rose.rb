@@ -7,7 +7,7 @@ class GildedRose
 
 
   def create_categories()
-    @normal_items = @items.select { |item| !item.name.include?("Aged Brie") and !item.name.include?("Backstage passes") and !item.name.include?("Sulfuras") }
+    @normal_items = @items.select { |item| !item.name.include?("Aged Brie") and !item.name.include?("Backstage passes") and !item.name.include?("Sulfuras") and !item.name.include?("Conjured") }
     @conjured_items = @items.select { |item| item.name.include?("Conjured") }
     @aged_bries = @items.select { |item| item.name.include?("Aged Brie") }
     @backstage_passes = @items.select { |item| item.name.include?("Backstage") }
